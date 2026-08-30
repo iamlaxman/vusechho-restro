@@ -1,21 +1,57 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "THE भु-से-छो: (The Vu-Se-Chho)",
+  "short_name": "भु-से-छो",
+  "description": "Authentic Nepali restaurant with RC drift racing, mini construction, and live music in Urlabari-4, Morang, Nepal.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1612",
+  "theme_color": "#1a1612",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon/web-app-manifest-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "/favicon/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
     },
     {
-      "src": "/favicon/web-app-manifest-512x512.png",
+      "src": "/favicon/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/favicon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "lang": "ne",
+  "dir": "ltr",
+  "categories": ["food", "restaurant", "entertainment"],
+  "shortcuts": [
+    {
+      "name": "View Menu",
+      "url": "/menu.html",
+      "description": "See our full food menu"
+    },
+    {
+      "name": "Find Us",
+      "url": "/#location",
+      "description": "Get directions to our restaurant"
+    },
+    {
+      "name": "Order Now",
+      "url": "https://wa.me/9779865599528",
+      "description": "Order food via WhatsApp"
+    }
+  ]
 }

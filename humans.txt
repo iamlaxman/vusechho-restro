@@ -1,0 +1,17 @@
+# humans.txt for THE भु-से-छो:
+
+/* TEAM */
+Restaurant: THE भु-से-छो: (The Vu-Se-Chho)
+Location: Urlabari-4, School Dada, Morang, Nepal
+Contact: vusechho@gmail.com
+
+/* SITE */
+Last update: 2026
+Language: English, Nepali
+Doctype: HTML5
+IDE: VS Code
+
+/* THANKS */
+Google Fonts: https://fonts.google.com
+Unsplash: https://unsplash.com
+Google Maps: https://maps.google.com

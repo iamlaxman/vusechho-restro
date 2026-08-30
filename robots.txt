@@ -1,0 +1,12 @@
+# robots.txt for THE भु-से-छो: (vusechho.vercel.app)
+# https://vusechho.vercel.app/
+
+User-agent: *
+Allow: /
+Disallow: /favicon/
+
+# Crawl-delay (optional, uncomment if needed)
+# Crawl-delay: 10
+
+# Sitemap
+Sitemap: https://vusechho.vercel.app/sitemap.xml

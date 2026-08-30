@@ -1,0 +1,5 @@
+# Security contact for THE भु-से-छो:
+Contact: mailto:vusechho@gmail.com
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en, ne
+Canonical: https://vusechho.vercel.app/security.txt
