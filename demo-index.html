@@ -59,7 +59,6 @@
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link rel="dns-prefetch" href="https://player.vimeo.com">
 <link rel="dns-prefetch" href="https://i.vimeocdn.com">
-<link rel="preconnect" href="https://f.vimeocdn.com" crossorigin>
 <link rel="preload" as="image" href="thali.png" fetchpriority="high">
 <link rel="preload" as="image" href="logo.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,900&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;900&family=Noto+Sans+Devanagari:wght@700;900&display=swap">
@@ -183,7 +182,6 @@ a:active, button:active { outline: none; }
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -425,26 +423,21 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HERO — your previous design, refined
+   HERO
    ═══════════════════════════════════════════════════════════════ */
 .hero {
   position: relative;
   background: var(--clay);
   padding: clamp(0.625rem, 1.5vw, 1.5rem);
-  height: 100svh;
   min-height: 100svh;
-  max-height: 100svh;
   display: flex;
   align-items: stretch;
   overflow: hidden;
 }
-@supports not (height: 100svh) {
-  .hero { height: 100vh; min-height: 100vh; max-height: 100vh; }
-}
+@supports not (height: 100svh) { .hero { min-height: 100vh; } }
 .hero-card {
   position: relative;
   width: 100%;
-  height: 100%;
   background: var(--paper);
   color: var(--text-light);
   border-radius: 4px;
@@ -454,12 +447,13 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   align-items: center;
   overflow: hidden;
   box-shadow: 8px 8px 0 0 var(--ink);
-  animation: heroCardIn 0.9s var(--ease-out) both;
+  animation: heroCardIn 1s var(--ease-out) both;
 }
 @keyframes heroCardIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(24px) scale(0.97); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
+
 .hero-body {
   display: grid;
   grid-template-columns: 1fr;
@@ -469,6 +463,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   width: 100%;
 }
 .hero-copy { display: flex; flex-direction: column; gap: 1.15rem; max-width: 580px; }
+
 .hero-rule {
   display: flex; align-items: center; gap: 1rem;
   font-family: var(--font-sans);
@@ -477,9 +472,20 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   text-transform: uppercase;
   color: var(--clay);
   font-weight: 700;
-  animation: fadeUp 0.8s 0.15s var(--ease-out) both;
+  animation: heroBeat 0.9s var(--ease) 0.1s both;
 }
-.hero-rule::before { content: ''; width: 40px; height: 2px; background: var(--clay); }
+.hero-rule::before {
+  content: '';
+  width: 40px; height: 2px;
+  background: var(--clay);
+  transform-origin: left;
+  animation: ruleDraw 0.7s var(--ease) 0.3s both;
+}
+@keyframes ruleDraw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 .hero-nepali {
   font-family: var(--font-nepali);
   font-weight: 900;
@@ -488,21 +494,27 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   letter-spacing: -0.02em;
   color: var(--clay);
   text-shadow: 3px 3px 0 rgba(196, 74, 10, 0.12);
-  animation: fadeUp 0.8s 0.25s var(--ease-out) both;
+  animation: heroNepali 1.1s var(--ease) 0.2s both;
 }
+@keyframes heroNepali {
+  from { opacity: 0; transform: translateY(20px) scale(0.94); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
 .hero-squiggle {
   width: clamp(64px, 10vw, 96px);
   height: auto;
   color: var(--clay);
   margin: 0.15rem 0 0.35rem;
-  animation: fadeUp 0.8s 0.35s var(--ease-out) both;
+  animation: heroBeat 0.9s var(--ease) 0.4s both;
 }
 .hero-squiggle path {
   stroke-dasharray: 200;
   stroke-dashoffset: 200;
-  animation: squiggleDraw 1.2s var(--ease) 0.6s forwards;
+  animation: squiggleDraw 1.2s var(--ease) 0.5s forwards;
 }
 @keyframes squiggleDraw { to { stroke-dashoffset: 0; } }
+
 .hero-headline {
   font-family: var(--font-display);
   font-weight: 500;
@@ -511,7 +523,29 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   letter-spacing: -0.03em;
   color: var(--ink);
   font-variation-settings: "opsz" 144, "SOFT" 30;
-  animation: fadeUp 0.8s 0.4s var(--ease-out) both;
+  margin: 0;
+}
+.hero-headline .line {
+  display: block;
+  overflow: hidden;
+}
+.hero-headline .line > .word {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  animation: wordRise 0.85s var(--ease) forwards;
+}
+.hero-headline .line:nth-child(1) > .word:nth-child(1) { animation-delay: 0.45s; }
+.hero-headline .line:nth-child(1) > .word:nth-child(2) { animation-delay: 0.53s; }
+.hero-headline .line:nth-child(1) > .word:nth-child(3) { animation-delay: 0.61s; }
+.hero-headline .line:nth-child(1) > .word:nth-child(4) { animation-delay: 0.69s; }
+.hero-headline .line:nth-child(2) > .word:nth-child(1) { animation-delay: 0.55s; }
+.hero-headline .line:nth-child(2) > .word:nth-child(2) { animation-delay: 0.63s; }
+.hero-headline .line:nth-child(2) > .word:nth-child(3) { animation-delay: 0.71s; }
+.hero-headline .line:nth-child(3) > .word:nth-child(1) { animation-delay: 0.65s; }
+.hero-headline .line:nth-child(3) > .word:nth-child(2) { animation-delay: 0.73s; }
+@keyframes wordRise {
+  to { transform: translateY(0); opacity: 1; }
 }
 .hero-headline .accent {
   color: var(--clay);
@@ -519,21 +553,22 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   font-weight: 400;
   font-style: italic;
   display: block;
+  overflow: hidden;
 }
-.hero-headline .line { display: block; }
+
 .hero-lede {
   font-size: clamp(0.875rem, 1.3vw, 1rem);
   line-height: 1.65;
   color: var(--text-light-muted);
   max-width: 48ch;
-  animation: fadeUp 0.8s 0.5s var(--ease-out) both;
+  animation: heroBeat 0.9s var(--ease) 0.85s both;
 }
 .hero-cta-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 0.75rem;
-  animation: fadeUp 0.8s 0.6s var(--ease-out) both;
+  animation: heroBeat 0.9s var(--ease) 0.95s both;
 }
 .hero-trust {
   display: flex;
@@ -544,11 +579,12 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   font-size: 0.75rem;
   color: var(--text-light-muted);
   font-weight: 500;
-  animation: fadeUp 0.8s 0.7s var(--ease-out) both;
+  animation: heroBeat 0.9s var(--ease) 1.05s both;
 }
 .hero-trust .stars { color: var(--clay); letter-spacing: 0.1em; font-size: 0.875rem; }
 .hero-trust strong { color: var(--ink); font-weight: 700; }
-@keyframes fadeUp {
+
+@keyframes heroBeat {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
@@ -609,7 +645,11 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   max-height: 100%;
   margin: 0 auto;
   aspect-ratio: 1 / 1;
-  animation: fadeUp 1s 0.55s var(--ease-out) both;
+  animation: heroArtIn 1.4s var(--ease) 0.35s both;
+}
+@keyframes heroArtIn {
+  from { opacity: 0; transform: scale(0.82) rotate(-12deg); filter: blur(10px); }
+  to { opacity: 1; transform: scale(1) rotate(0deg); filter: blur(0); }
 }
 .hero-thali {
   position: relative;
@@ -656,11 +696,14 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   border-radius: 50%;
   box-shadow: 0 0 0 2px var(--ink);
   z-index: 2;
-  animation: sparkPulse 2.5s ease-in-out infinite;
+  opacity: 0;
+  animation: sparkPulse 2.5s ease-in-out 1.5s infinite,
+             sparkEnter 0.5s var(--ease) forwards;
 }
-.hero-spark--1 { top: 12%; right: 14%; }
-.hero-spark--2 { bottom: 20%; left: 12%; animation-delay: -0.8s; width: 8px; height: 8px; }
-.hero-spark--3 { top: 24%; left: 8%; animation-delay: -1.6s; width: 6px; height: 6px; }
+.hero-spark--1 { top: 12%; right: 14%; animation-delay: 1.5s, 1.5s; }
+.hero-spark--2 { bottom: 20%; left: 12%; width: 8px; height: 8px; animation-delay: 1.5s, 1.65s; }
+.hero-spark--3 { top: 24%; left: 8%; width: 6px; height: 6px; animation-delay: 1.5s, 1.8s; }
+@keyframes sparkEnter { to { opacity: 1; } }
 @keyframes sparkPulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.4); opacity: 0.6; }
@@ -681,49 +724,33 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   .hero-art { max-height: calc(100svh - 14rem); }
 }
 @media (max-width: 899px) {
-  .hero { padding: 0.5rem; }
+  .hero { padding: 0.5rem; min-height: auto; }
   .hero-card { padding: 1.5rem 1.35rem; box-shadow: 6px 6px 0 0 var(--ink); }
-  .hero-body {
-    gap: 1rem;
-    grid-template-rows: auto auto;
-    justify-items: center;
-    align-items: center;
-  }
-  .hero-art {
-    order: -1;
-    max-width: min(62vw, 280px);
-    max-height: 40svh;
-    margin: 0 auto;
-  }
-  .hero-thali { max-height: 40svh; }
+  .hero-body { gap: 1rem; grid-template-rows: auto auto; justify-items: center; align-items: center; }
+  .hero-art { order: -1; max-width: min(62vw, 280px); max-height: 38svh; margin: 0 auto; }
+  .hero-thali { max-height: 38svh; }
   .hero-thali::before { inset: 5%; }
   .hero-thali::after { inset: -3%; }
-  .hero-copy {
-    order: 1;
-    gap: 0.85rem;
-    align-items: center;
-    text-align: center;
-    max-width: 100%;
-    width: 100%;
-  }
-  .hero-rule { font-size: 0.5625rem; letter-spacing: 0.2em; }
+  .hero-copy { order: 1; gap: 0.85rem; align-items: center; text-align: center; max-width: 100%; width: 100%; }
+  .hero-rule { font-size: 0.625rem; letter-spacing: 0.16em; }
   .hero-rule::before { width: 28px; height: 1.5px; }
   .hero-nepali { font-size: clamp(2rem, 10vw, 3rem); }
   .hero-squiggle { width: 64px; margin: 0.1rem 0 0.25rem; }
   .hero-headline { font-size: clamp(1.25rem, 5.5vw, 1.75rem); line-height: 1.1; }
   .hero-lede { font-size: 0.8125rem; max-width: 36ch; margin: 0 auto; }
   .hero-cta-row { width: 100%; gap: 0.5rem; margin-top: 0.5rem; justify-content: center; }
-  .hero-cta-row .btn-hero { flex: 1; min-width: 0; padding: 0.8rem 0.9rem; font-size: 0.625rem; min-height: 46px; }
+  .hero-cta-row .btn-hero { flex: 1; min-width: 0; padding: 0.8rem 0.75rem; font-size: 0.6875rem; min-height: 48px; }
   .hero-trust { justify-content: center; font-size: 0.6875rem; }
 }
 @media (max-width: 400px) {
   .hero-card { padding: 1.25rem 1rem; }
-  .hero-art { max-width: min(58vw, 220px); max-height: 34svh; }
-  .hero-thali { max-height: 34svh; }
+  .hero-art { max-width: min(58vw, 220px); max-height: 32svh; }
+  .hero-thali { max-height: 32svh; }
   .hero-nepali { font-size: 1.875rem; }
   .hero-headline { font-size: 1.15rem; }
   .hero-lede { font-size: 0.75rem; }
-  .hero-cta-row .btn-hero { padding: 0.7rem 0.75rem; font-size: 0.5625rem; min-height: 42px; }
+  .hero-cta-row { flex-direction: column; }
+  .hero-cta-row .btn-hero { width: 100%; padding: 0.7rem 0.75rem; font-size: 0.625rem; min-height: 44px; }
 }
 @media (max-width: 899px) and (orientation: landscape) {
   .hero-body { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
@@ -903,6 +930,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   font-weight: 400;
   color: var(--clay);
 }
+
 .ms-root {
   position: relative;
   max-width: 1100px;
@@ -932,7 +960,6 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   box-shadow: 3px 3px 0 0 var(--ink);
   flex-shrink: 0;
   user-select: none;
-  padding: 0;
 }
 .ms-thumb img {
   width: 100%; height: 100%;
@@ -978,7 +1005,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   background: var(--paper);
   border-bottom: 2px solid var(--ink);
   overflow: hidden;
-  min-height: 260px;
+  min-height: 220px;
   transition: border-color 0.6s var(--ease);
 }
 .ms-card.feat .ms-card-img { border-bottom-color: var(--clay); }
@@ -1010,7 +1037,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   margin: auto;
   z-index: 1;
   width: 100%;
-  max-width: 240px;
+  max-width: 220px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 16px 28px rgba(26, 23, 20, 0.22));
@@ -1040,6 +1067,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   flex-direction: column;
   gap: 1.25rem;
   background: var(--paper-soft);
+  transition: background 0.6s var(--ease);
 }
 .ms-card-num,
 .ms-card-badge,
@@ -1059,6 +1087,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   opacity: 0;
   transform: translateY(10px);
 }
+
 .ms-card-num {
   font-family: var(--font-mono);
   font-size: 0.625rem;
@@ -1072,7 +1101,12 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   gap: 0.75rem;
   transition-delay: 0.05s;
 }
-.ms-card-num::before { content: ''; width: 24px; height: 1px; background: var(--clay); }
+.ms-card-num::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--clay);
+}
 .ms-card-badge {
   display: inline-flex;
   align-items: center;
@@ -1133,7 +1167,11 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   font-weight: 600;
   background: transparent;
 }
-.tag-hot { border-color: var(--clay); background: var(--clay); color: var(--paper); }
+.tag-hot {
+  border-color: var(--clay);
+  background: var(--clay);
+  color: var(--paper);
+}
 .ms-price {
   font-family: var(--font-mono);
   font-weight: 700;
@@ -1151,8 +1189,10 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
     border-right: 2px solid var(--ink);
     min-height: 100%;
     padding: 2rem;
+    transition: border-color 0.6s var(--ease);
   }
   .ms-card.feat .ms-card-img { border-right-color: var(--clay); }
+  .ms-card-img img { max-width: 240px; }
 }
 
 .ms-fullmenu {
@@ -1213,23 +1253,12 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
     justify-content: flex-start;
   }
   .ms-thumbs::-webkit-scrollbar { display: none; }
-  .ms-thumb {
-    width: 58px;
-    height: 58px;
-    flex-shrink: 0;
-    scroll-snap-align: center;
-    box-shadow: 2px 2px 0 0 var(--ink);
-  }
+  .ms-thumb { width: 58px; height: 58px; flex-shrink: 0; scroll-snap-align: center; box-shadow: 2px 2px 0 0 var(--ink); }
   .ms-thumb.is-active { transform: scale(1.1); box-shadow: 0 0 0 3px var(--paper), 3px 3px 0 0 var(--ink); }
   .ms-card { max-width: 100%; box-shadow: 6px 6px 0 0 var(--ink); margin: 0; }
-  .ms-card-img {
-    padding: 1.75rem 1.5rem;
-    min-height: 220px;
-    border-right: none;
-    border-bottom: 2px solid var(--ink);
-  }
+  .ms-card-img { padding: 1.75rem 1.5rem; min-height: 200px; border-right: none; border-bottom: 2px solid var(--ink); }
   .ms-card.feat .ms-card-img { border-bottom-color: var(--clay); }
-  .ms-card-img img { max-width: 180px; }
+  .ms-card-img img { max-width: 170px; }
   .ms-card-body { padding: 1.5rem 1.5rem 1.5rem; gap: 1rem; }
   .ms-card-name { font-size: 1.4rem; }
   .ms-card-desc { font-size: 0.875rem; margin-bottom: 1rem; }
@@ -1241,8 +1270,8 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 }
 @media (max-width: 400px) {
   .ms-thumb { width: 52px; height: 52px; }
-  .ms-card-img { padding: 1.5rem 1rem; min-height: 190px; }
-  .ms-card-img img { max-width: 160px; }
+  .ms-card-img { padding: 1.5rem 1rem; min-height: 170px; }
+  .ms-card-img img { max-width: 150px; }
   .ms-card-body { padding: 1.25rem 1.25rem 1.25rem; }
 }
 
@@ -1968,7 +1997,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   border-top: 1px solid var(--border-dark);
   text-align: center;
 }
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; gap: 1.5rem; flex-wrap: wrap; }
 }
 .footer-drift {
@@ -2034,7 +2063,9 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 }
 .footer-backtop:hover::after { transform: translateY(-2px); }
 
-/* Footer credit — Laxman Poudel */
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER CREDIT — Designed by Laxman Poudel
+   ═══════════════════════════════════════════════════════════════ */
 .footer-credit {
   display: flex;
   align-items: center;
@@ -2080,7 +2111,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   background: var(--clay);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.4s var(--ease);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .footer-credit a:hover { color: var(--paper); }
 .footer-credit a:hover::after { transform: scaleX(1); background: var(--paper); }
@@ -2137,6 +2168,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   .ms-card-img::before,
   .ms-card-img::after,
   .footer-credit .heart { animation: none; }
+  .hero-headline .line > .word { transform: translateY(0); opacity: 1; }
   .statement-title .reveal-line > span { transform: translateY(0); }
 }
 
@@ -2206,9 +2238,6 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 
 <main id="main">
 
-<!-- ═══════════════════════════════════════════════════════════
-     HERO — your previous design, refined
-     ═══════════════════════════════════════════════════════════ -->
 <section class="hero" aria-label="Welcome">
   <div class="hero-card">
     <div class="hero-body">
@@ -2220,9 +2249,9 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
                 stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
         </svg>
         <h1 class="hero-headline">
-          <span class="line">A plate of love,</span>
-          <span class="accent">from Nepali fire</span>
-          <span class="line">for you.</span>
+          <span class="line"><span class="word">A</span> <span class="word">plate</span> <span class="word">of</span> <span class="word">love,</span></span>
+          <span class="accent line"><span class="word">from</span> <span class="word">Nepali</span> <span class="word">fire</span></span>
+          <span class="line"><span class="word">for</span> <span class="word">you.</span></span>
         </h1>
         <p class="hero-lede">
           Chulo-cooked dishes, RC drift nights, live music. Order online for delivery inside Urlabari — or come sit at our table.
@@ -2286,19 +2315,19 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
     <div class="exp-grid">
       <article class="exp-card reveal">
         <span class="exp-num">01 / EAT</span>
-        <div class="exp-img"><img src="https://www.seriouseats.com/thmb/5WzEFZMg4N5Wmbhekez8zynxZX4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/20250821-SEA-CharKwayTeow-MelatiCitrawireja-HERO-a70f91c1c5c64104ba1f4fee9034935c.jpg" alt="Chulo kitchen fire cooking" loading="lazy" width="800" height="600"></div>
+        <div class="exp-img"><img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&q=80" alt="Chulo kitchen fire cooking" loading="lazy" width="800" height="600"></div>
         <h3 class="exp-title">From the chulo to the table.</h3>
         <p class="exp-desc">Smoke, spice, and shared plates. Nepali recipes cooked over open fire — meant for lingering.</p>
       </article>
       <article class="exp-card reveal reveal-delay-1">
         <span class="exp-num">02 / DRIFT</span>
-        <div class="exp-img"><img src="https://www.pandora-rc.net/wp-content/uploads/hcr32-skyline-4dr-abomoon-01.jpg" alt="RC drift racing track" loading="lazy" width="800" height="600"></div>
+        <div class="exp-img"><img src="https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=800&q=80" alt="RC drift racing track" loading="lazy" width="800" height="600"></div>
         <h3 class="exp-title">Ready. Set. Drift.</h3>
         <p class="exp-desc">RC racing, fast corners, friendly competition. All skill levels welcome.</p>
       </article>
       <article class="exp-card reveal reveal-delay-2">
         <span class="exp-num">03 / PLAY</span>
-        <div class="exp-img"><img src="https://rccities.com/wp-content/uploads/2024/07/image3.jpg" alt="Family play area outdoors" loading="lazy" width="800" height="600"></div>
+        <div class="exp-img"><img src="https://images.unsplash.com/photo-1543536448-d209d2d13a1c?w=800&q=80" alt="Family play area outdoors" loading="lazy" width="800" height="600"></div>
         <h3 class="exp-title">Bring the whole crew.</h3>
         <p class="exp-desc">Family-friendly and group-ready. Space to move, things to try, zero pressure.</p>
       </article>
@@ -2326,15 +2355,16 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   </div>
 
   <div class="ms-root" id="msRoot">
+
     <div class="ms-thumbs" role="tablist" aria-label="Select a dish">
       <button class="ms-thumb is-active" type="button" role="tab" aria-selected="true" data-dish="0" title="VUSE Chicken Khana">
-        <img src="https://static.vecteezy.com/system/resources/previews/047/820/773/large_2x/high-quality-mouth-watering-delicious-food-image-isolated-free-png.png" alt="VUSE Chicken Khana" width="80" height="80" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=200&q=80" alt="VUSE Chicken Khana" width="80" height="80" loading="lazy">
       </button>
       <button class="ms-thumb" type="button" role="tab" aria-selected="false" data-dish="1" title="Chicken Jhol Momo">
-        <img src="https://static.vecteezy.com/system/resources/previews/054/307/144/non_2x/appetizing-dumpling-clipart-perfect-for-culinary-and-food-projects-free-png.png" alt="Chicken Jhol Momo" width="80" height="80" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=200&q=80" alt="Chicken Jhol Momo" width="80" height="80" loading="lazy">
       </button>
       <button class="ms-thumb" type="button" role="tab" aria-selected="false" data-dish="2" title="Chicken Chhoila">
-        <img src="https://static.vecteezy.com/system/resources/previews/021/217/017/non_2x/fried-breaded-thigh-png.png" alt="Chicken Chhoila" width="80" height="80" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=200&q=80" alt="Chicken Chhoila" width="80" height="80" loading="lazy">
       </button>
       <button class="ms-thumb" type="button" role="tab" aria-selected="false" data-dish="3" title="Chicken Sekuwa">
         <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=200&q=80" alt="Chicken Sekuwa" width="80" height="80" loading="lazy">
@@ -2343,7 +2373,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 
     <div class="ms-card feat" id="msCard">
       <div class="ms-card-img" id="msCardImg">
-        <img src="https://static.vecteezy.com/system/resources/previews/047/820/773/large_2x/high-quality-mouth-watering-delicious-food-image-isolated-free-png.png" alt="VUSE Chicken Khana" class="is-active" width="600" height="600">
+        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=80" alt="VUSE Chicken Khana" class="is-active" width="600" height="600">
       </div>
       <div class="ms-card-body">
         <div>
@@ -2365,6 +2395,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
     <div class="ms-fullmenu">
       <a href="menu.html">View full menu &amp; order</a>
     </div>
+
   </div>
 </section>
 
@@ -2419,7 +2450,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
         <div class="live-event"><span>Private events</span><span class="time">On request</span></div>
       </div>
     </div>
-    <div class="live-img reveal reveal-delay-1"><img src="assets/images/music.jpg" alt="Live music event" loading="lazy" width="1000" height="750"></div>
+    <div class="live-img reveal reveal-delay-1"><img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000&q=80" alt="Live music event" loading="lazy" width="1000" height="750"></div>
   </div>
 </section>
 
@@ -2436,11 +2467,11 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   <div class="cis-11">
     <div class="cis-11__row">
       <figure class="cis-11__panel" tabindex="0">
-        <img src="assets/images/people.jpg" alt="Full restaurant table on a busy night" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=1200&q=80" alt="Full restaurant table on a busy night" loading="lazy">
         <figcaption><span>01</span>Saturday · Table Full</figcaption>
       </figure>
       <figure class="cis-11__panel" tabindex="0">
-        <img src="assets/images/track.jpg" alt="RC drift track racing" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=1200&q=80" alt="RC drift track racing" loading="lazy">
         <figcaption><span>02</span>Track · 17:06</figcaption>
       </figure>
       <figure class="cis-11__panel" tabindex="0">
@@ -2448,7 +2479,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
         <figcaption><span>03</span>Chulo · 18:22</figcaption>
       </figure>
       <figure class="cis-11__panel" tabindex="0">
-        <img src="assets/images/drift.jpg" alt="RC drift car in action" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=1200&q=80" alt="RC drift car in action" loading="lazy">
         <figcaption><span>04</span>Drift · 16:48</figcaption>
       </figure>
       <figure class="cis-11__panel" tabindex="0">
@@ -2456,7 +2487,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
         <figcaption><span>05</span>Live · 21:15</figcaption>
       </figure>
       <figure class="cis-11__panel" tabindex="0">
-        <img src="assets/images/family.jpg" alt="Family table on Sunday" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1200&q=80" alt="Family table on Sunday" loading="lazy">
         <figcaption><span>06</span>Sunday · Family</figcaption>
       </figure>
     </div>
@@ -2466,11 +2497,11 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
     <div class="gallery-mobile__viewport">
       <div class="gallery-mobile__track" id="galleryTrack">
         <figure class="gallery-mobile__slide">
-          <img src="assets/images/people.jpg" alt="Full restaurant table" draggable="false" loading="lazy">
+          <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=1000&q=80" alt="Full restaurant table" draggable="false" loading="lazy">
           <figcaption class="gallery-mobile__caption"><span>01 — Saturday</span><strong>Table Full</strong></figcaption>
         </figure>
         <figure class="gallery-mobile__slide">
-          <img src="assets/images/track.jpg" alt="RC drift track" draggable="false" loading="lazy">
+          <img src="https://images.unsplash.com/photo-1594787318286-3d835c1d207f?w=1000&q=80" alt="RC drift track" draggable="false" loading="lazy">
           <figcaption class="gallery-mobile__caption"><span>02 — Track</span><strong>17:06</strong></figcaption>
         </figure>
         <figure class="gallery-mobile__slide">
@@ -2478,7 +2509,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
           <figcaption class="gallery-mobile__caption"><span>03 — Chulo</span><strong>18:22</strong></figcaption>
         </figure>
         <figure class="gallery-mobile__slide">
-          <img src="assets/images/drift.jpg" alt="RC drift car" draggable="false" loading="lazy">
+          <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=1000&q=80" alt="RC drift car" draggable="false" loading="lazy">
           <figcaption class="gallery-mobile__caption"><span>04 — Drift</span><strong>16:48</strong></figcaption>
         </figure>
         <figure class="gallery-mobile__slide">
@@ -2486,7 +2517,7 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
           <figcaption class="gallery-mobile__caption"><span>05 — Live</span><strong>21:15</strong></figcaption>
         </figure>
         <figure class="gallery-mobile__slide">
-          <img src="assets/images/family.jpg" alt="Family table" draggable="false" loading="lazy">
+          <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1000&q=80" alt="Family table" draggable="false" loading="lazy">
           <figcaption class="gallery-mobile__caption"><span>06 — Sunday</span><strong>Family</strong></figcaption>
         </figure>
       </div>
@@ -2640,10 +2671,13 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* NAV */
+  /* ═══════════════════════════════════════════════════════════════
+     NAV — show after hero
+     ═══════════════════════════════════════════════════════════════ */
   const nav = document.getElementById('nav');
   const hero = document.querySelector('.hero');
   let heroBottom = 0;
+
   function measureHero() {
     if (hero) heroBottom = hero.offsetHeight - 100;
   }
@@ -2660,10 +2694,13 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
   }, { passive: true });
   updateNav();
 
-  /* MOBILE MENU */
+  /* ═══════════════════════════════════════════════════════════════
+     MOBILE MENU
+     ═══════════════════════════════════════════════════════════════ */
   const burger = document.getElementById('burger');
   const mobileMenu = document.getElementById('mobileMenu');
   const mobileLinks = mobileMenu.querySelectorAll('a');
+
   function openMenu() {
     mobileMenu.classList.add('active');
     burger.classList.add('active');
@@ -2687,120 +2724,56 @@ button { font-family: inherit; background: none; border: none; cursor: pointer; 
     }
   });
 
-  /* FOOTER YEAR */
+  /* ═══════════════════════════════════════════════════════════════
+     FOOTER YEAR
+     ═══════════════════════════════════════════════════════════════ */
   const yearEl = document.getElementById('footerYear');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-/* ═══════════════════════════════════════════════════════════════
-   DRIFT VIDEO — loads fast, starts at 19s, loops back at 60s
-   ─────────────────────────────────────────────────────────────
-   Strategy:
-   1. Poster image shows instantly (already in HTML).
-   2. Iframe injects via requestIdleCallback right after page
-      becomes interactive — not when scrolled into view.
-   3. `#t=19s` fragment makes Vimeo start at 19s natively —
-      no API needed for the start point.
-   4. Vimeo Player API loads lazily ONLY after iframe is ready,
-      then loops the 19s→60s segment via timeupdate.
-   5. If the API fails to load, the video still plays and loops
-      the whole clip natively — graceful degradation.
-   ═══════════════════════════════════════════════════════════════ */
-const driftBg = document.getElementById('driftBg');
-const vimeoWrap = document.getElementById('vimeoWrap');
+  /* ═══════════════════════════════════════════════════════════════
+     DRIFT VIDEO — deferred load, poster first
+     ═══════════════════════════════════════════════════════════════ */
+  const driftBg = document.getElementById('driftBg');
+  const vimeoWrap = document.getElementById('vimeoWrap');
 
-const VIMEO_START = 19;   // seconds
-const VIMEO_END   = 60;   // seconds
+  function injectVimeo() {
+    if (!vimeoWrap || vimeoWrap.dataset.loaded) return;
+    if (prefersReduced) return;
+    vimeoWrap.dataset.loaded = '1';
 
-let vimeoIframe = null;
-let vimeoPlayer = null;
-let vimeoApiLoaded = false;
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://player.vimeo.com/video/62881736?h=691a0d0a91&background=1&autoplay=1&loop=1&muted=1&autopause=0&controls=0&title=0&byline=0&portrait=0&dnt=1';
+    iframe.title = 'Drift track background';
+    iframe.setAttribute('frameborder', '0');
+    iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+    iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    iframe.setAttribute('tabindex', '-1');
+    iframe.setAttribute('aria-hidden', 'true');
 
-function injectVimeo() {
-  if (!vimeoWrap || vimeoWrap.dataset.loaded) return;
-  if (prefersReduced) return;
-  vimeoWrap.dataset.loaded = '1';
+    iframe.addEventListener('load', function() {
+      setTimeout(function() {
+        vimeoWrap.classList.add('ready');
+        driftBg.classList.add('video-ready');
+      }, 400);
+    });
 
-  vimeoIframe = document.createElement('iframe');
-  // #t=19s makes Vimeo start at the 19-second mark natively
-  vimeoIframe.src = 'https://player.vimeo.com/video/62881736?h=691a0d0a91&background=1&autoplay=1&loop=1&muted=1&autopause=0&controls=0&title=0&byline=0&portrait=0&dnt=1#t=' + VIMEO_START + 's';
-  vimeoIframe.title = 'Drift track background';
-  vimeoIframe.setAttribute('frameborder', '0');
-  vimeoIframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-  vimeoIframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-  vimeoIframe.setAttribute('tabindex', '-1');
-  vimeoIframe.setAttribute('aria-hidden', 'true');
-
-  vimeoIframe.addEventListener('load', function() {
-    // Fade in once the first frame has rendered
-    setTimeout(function() {
-      vimeoWrap.classList.add('ready');
-      driftBg.classList.add('video-ready');
-      // Now that video is visible, lazily load the Player API
-      // to handle the 19s → 60s loop. Doesn't slow initial paint.
-      loadVimeoApiForSegmentLoop();
-    }, 400);
-  });
-
-  vimeoWrap.appendChild(vimeoIframe);
-}
-
-function loadVimeoApiForSegmentLoop() {
-  if (vimeoApiLoaded || !vimeoIframe) return;
-  vimeoApiLoaded = true;
-
-  const script = document.createElement('script');
-  script.src = 'https://player.vimeo.com/api/player.js';
-  script.async = true;
-  script.onload = function() {
-    if (!window.Vimeo || !vimeoIframe) return;
-    try {
-      vimeoPlayer = new Vimeo.Player(vimeoIframe);
-      // Ensure it starts at 19s (belt-and-suspenders)
-      vimeoPlayer.setCurrentTime(VIMEO_START).catch(function() {});
-      vimeoPlayer.play().catch(function() {});
-
-      // Loop the 19s → 60s segment
-      vimeoPlayer.on('timeupdate', function(data) {
-        if (data.seconds >= VIMEO_END) {
-          vimeoPlayer.setCurrentTime(VIMEO_START).catch(function() {});
-        }
-      });
-
-      // Pause when the section scrolls out of view — saves CPU/battery
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver(function(entries) {
-          entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-              vimeoPlayer.play().catch(function() {});
-            } else {
-              vimeoPlayer.pause().catch(function() {});
-            }
-          });
-        }, { threshold: 0.1 });
-        io.observe(document.getElementById('drift'));
-      }
-    } catch (e) {
-      // If anything fails, the video keeps looping the whole clip natively
-    }
-  };
-  script.onerror = function() {
-    // API failed to load — video still loops whole clip natively via &loop=1
-  };
-  document.head.appendChild(script);
-}
-
-if ('requestIdleCallback' in window) {
-  requestIdleCallback(injectVimeo, { timeout: 1500 });
-} else {
-  window.addEventListener('load', function() {
-    setTimeout(injectVimeo, 150);
-  });
-  if (document.readyState === 'complete') {
-    setTimeout(injectVimeo, 150);
+    vimeoWrap.appendChild(iframe);
   }
-}
 
-  /* MENU — single card morph */
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(injectVimeo, { timeout: 2000 });
+  } else {
+    window.addEventListener('load', function() {
+      setTimeout(injectVimeo, 200);
+    });
+    if (document.readyState === 'complete') {
+      setTimeout(injectVimeo, 200);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     MENU — in-place morph (single card, no stacking)
+     ═══════════════════════════════════════════════════════════════ */
   const DISHES = [
     {
       num: "01 — Chef's Pick",
@@ -2809,7 +2782,7 @@ if ('requestIdleCallback' in window) {
       desc: "The full spread — rice, dal, seasonal vegetables, achar, and tender chicken. A table in one plate.",
       tags: [{ t: "Fire", hot: true }, { t: "Sharing", hot: false }],
       price: "Rs. 300",
-      img: "https://static.vecteezy.com/system/resources/previews/047/820/773/large_2x/high-quality-mouth-watering-delicious-food-image-isolated-free-png.png",
+      img: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=80",
       alt: "VUSE Chicken Khana — full Nepali set",
       feat: true
     },
@@ -2820,7 +2793,7 @@ if ('requestIdleCallback' in window) {
       desc: "Steamed, spiced, and drowning in a tangy sesame broth.",
       tags: [{ t: "Steamed", hot: false }, { t: "Veg option", hot: false }],
       price: "Rs. 180",
-      img: "https://static.vecteezy.com/system/resources/previews/054/307/144/non_2x/appetizing-dumpling-clipart-perfect-for-culinary-and-food-projects-free-png.png",
+      img: "https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?w=800&q=80",
       alt: "Chicken Jhol Momo — steamed dumplings",
       feat: false
     },
@@ -2831,7 +2804,7 @@ if ('requestIdleCallback' in window) {
       desc: "Charred over open fire, tossed with mustard oil and herbs.",
       tags: [{ t: "Fire", hot: true }, { t: "Spiced", hot: false }],
       price: "Rs. 290",
-      img: "https://static.vecteezy.com/system/resources/previews/021/217/017/non_2x/fried-breaded-thigh-png.png",
+      img: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&q=80",
       alt: "Chicken Chhoila — fire-charred spiced meat",
       feat: false
     },
@@ -2842,7 +2815,7 @@ if ('requestIdleCallback' in window) {
       desc: "Marinated overnight, grilled over embers. Order by the plate or by the kilo.",
       tags: [{ t: "Grill", hot: true }, { t: "Overnight", hot: false }],
       price: "Rs. 200",
-      img: "https://static.vecteezy.com/system/resources/previews/026/774/043/large_2x/gamjatang-with-ai-generated-free-png.png",
+      img: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80",
       alt: "Chicken Sekuwa — grilled marinated meat",
       feat: false
     }
@@ -2870,9 +2843,13 @@ if ('requestIdleCallback' in window) {
   function morphTo(idx) {
     if (morphing || idx === currentDish) return;
     morphing = true;
+
     const dish = DISHES[idx];
+
+    // 1. Fade text out
     msCard.classList.add('swapping');
 
+    // 2. Prep new image element
     const newImg = document.createElement('img');
     newImg.src = dish.img;
     newImg.alt = dish.alt;
@@ -2880,10 +2857,14 @@ if ('requestIdleCallback' in window) {
     newImg.height = 600;
     newImg.className = 'is-entering';
 
+    // 3. Mark old image as leaving
     const oldImg = msCardImg.querySelector('img.is-active');
     if (oldImg) oldImg.classList.add('is-leaving');
+
+    // 4. Append new image after a tiny beat
     msCardImg.appendChild(newImg);
 
+    // 5. Swap text at the mid-point of the crossfade
     setTimeout(function() {
       msNum.textContent = dish.num;
       if (dish.badge) {
@@ -2902,6 +2883,7 @@ if ('requestIdleCallback' in window) {
       msCard.classList.remove('swapping');
     }, 220);
 
+    // 6. Trigger enter animation on next frame
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
         newImg.classList.remove('is-entering');
@@ -2909,11 +2891,13 @@ if ('requestIdleCallback' in window) {
       });
     });
 
+    // 7. Cleanup after transition completes
     setTimeout(function() {
       if (oldImg && oldImg.parentNode) oldImg.parentNode.removeChild(oldImg);
       currentDish = idx;
       morphing = false;
     }, 750);
+
     renderThumbState(idx);
   }
 
@@ -2927,7 +2911,9 @@ if ('requestIdleCallback' in window) {
     });
   });
 
-  /* GALLERY MOBILE */
+  /* ═══════════════════════════════════════════════════════════════
+     GALLERY MOBILE
+     ═══════════════════════════════════════════════════════════════ */
   const galleryMobile = document.getElementById('galleryMobile');
   if (galleryMobile) {
     const track = document.getElementById('galleryTrack');
@@ -3044,7 +3030,9 @@ if ('requestIdleCallback' in window) {
     updateUI();
   }
 
-  /* REVEAL */
+  /* ═══════════════════════════════════════════════════════════════
+     REVEAL ON SCROLL (also triggers statement-title line reveal)
+     ═══════════════════════════════════════════════════════════════ */
   if (!prefersReduced && 'IntersectionObserver' in window) {
     const observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
@@ -3059,6 +3047,7 @@ if ('requestIdleCallback' in window) {
     document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
   }
 
+  // Statement title uses `.visible` on itself, not via .reveal wrapper
   const statementTitle = document.getElementById('statementTitle');
   if (statementTitle && 'IntersectionObserver' in window && !prefersReduced) {
     const stIO = new IntersectionObserver(function(entries) {
@@ -3074,7 +3063,9 @@ if ('requestIdleCallback' in window) {
     statementTitle.classList.add('visible');
   }
 
-  /* SMOOTH SCROLL */
+  /* ═══════════════════════════════════════════════════════════════
+     SMOOTH SCROLL
+     ═══════════════════════════════════════════════════════════════ */
   document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
     anchor.addEventListener('click', function(e) {
       const targetId = this.getAttribute('href');

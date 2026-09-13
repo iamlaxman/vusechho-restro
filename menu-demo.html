@@ -82,8 +82,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
-  /* KEY FIX: smooth anchor scroll with offset */
-  scroll-padding-top: calc(var(--header-h) + 12px);
 }
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -503,7 +501,7 @@ input, textarea { font-family: inherit; }
 .side-menu-foot a:hover { color: var(--clay); }
 
 /* ═══════════════════════════════════════════════════════════════
-   HERO — covers every device perfectly
+   HERO — properly fills desktop
    ═══════════════════════════════════════════════════════════════ */
 .hero {
   position: relative;
@@ -511,15 +509,13 @@ input, textarea { font-family: inherit; }
   padding: 0;
   overflow: hidden;
   isolation: isolate;
-  /* Full viewport coverage: height = viewport height minus nothing */
+  /* Key fix: proper viewport-lock on desktop */
   height: 100svh;
   min-height: 100svh;
   max-height: 100svh;
   display: flex;
   align-items: center;
-  /* Push content below fixed header via internal padding */
   padding-top: var(--header-h);
-  padding-bottom: 0;
 }
 @supports not (height: 100svh) {
   .hero {
@@ -557,13 +553,12 @@ input, textarea { font-family: inherit; }
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
-  padding: clamp(1.25rem, 3vw, 2.5rem) var(--gutter);
+  padding: 0 var(--gutter);
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(24px, 4vw, 56px);
   align-items: center;
-  /* Fill the space left after header padding */
-  height: calc(100% - 0px);
+  height: 100%;
   max-height: 100%;
 }
 @media (min-width: 900px) {
@@ -576,7 +571,7 @@ input, textarea { font-family: inherit; }
 .hero-copy {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.85rem, 1.6vh, 1.25rem);
+  gap: clamp(0.85rem, 1.8vh, 1.25rem);
   max-width: 620px;
   animation: heroFadeUp 0.9s var(--ease) both;
 }
@@ -611,7 +606,7 @@ input, textarea { font-family: inherit; }
 .hero-title {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.75rem, 4.8vw, 3.75rem);
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
   line-height: 1;
   letter-spacing: -0.04em;
   color: var(--paper);
@@ -645,7 +640,7 @@ input, textarea { font-family: inherit; }
 .hero-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(0.6rem, 1.4vw, 1.25rem) clamp(0.85rem, 2vw, 1.75rem);
+  gap: clamp(0.75rem, 2vw, 1.5rem) clamp(1rem, 2.5vw, 2rem);
   padding-top: 0.25rem;
   animation: heroFadeUp 0.9s 0.6s var(--ease) both;
 }
@@ -653,7 +648,7 @@ input, textarea { font-family: inherit; }
 .hero-stat-num {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.0625rem, 1.9vw, 1.625rem);
+  font-size: clamp(1.125rem, 1.9vw, 1.625rem);
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--paper);
@@ -677,7 +672,7 @@ input, textarea { font-family: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
-  padding: clamp(0.75rem, 1.3vw, 0.95rem) clamp(1.25rem, 2.2vw, 1.65rem);
+  padding: clamp(0.8rem, 1.4vw, 1rem) clamp(1.35rem, 2.4vw, 1.75rem);
   background: var(--clay);
   color: var(--ink);
   border: 2px solid var(--ink);
@@ -692,7 +687,7 @@ input, textarea { font-family: inherit; }
   box-shadow: 4px 4px 0 0 var(--paper);
   align-self: flex-start;
   animation: heroFadeUp 0.9s 0.7s var(--ease) both;
-  min-height: 46px;
+  min-height: 48px;
   margin-top: 0.25rem;
 }
 .hero-cta:hover {
@@ -714,7 +709,10 @@ input, textarea { font-family: inherit; }
   margin: 0 auto;
   aspect-ratio: 1 / 1;
   animation: heroFadeUp 1s 0.3s var(--ease) both;
-  max-height: 100%;
+  max-height: calc(100svh - var(--header-h) - 80px);
+}
+@supports not (height: 100svh) {
+  .hero-visual { max-height: calc(100vh - var(--header-h) - 80px); }
 }
 
 .hero-visual-main {
@@ -854,44 +852,17 @@ input, textarea { font-family: inherit; }
   50% { transform: scale(1.5); opacity: 0.5; }
 }
 
-/* Desktop — shrink things on short viewports so nothing clips */
-@media (min-width: 900px) and (max-height: 800px) {
-  .hero-visual { max-width: min(420px, 38vw); }
-  .hero-title { font-size: clamp(1.625rem, 3.6vw, 3rem); }
-  .hero-inner { gap: clamp(32px, 4vw, 56px); padding-top: clamp(1rem, 2vw, 1.5rem); padding-bottom: clamp(1rem, 2vw, 1.5rem); }
-}
-@media (min-width: 900px) and (max-height: 700px) {
-  .hero-visual { max-width: min(380px, 34vw); }
-  .hero-title { font-size: clamp(1.5rem, 3.2vw, 2.5rem); }
-  .hero-desc { font-size: 0.9375rem; }
-  .hero-stats { gap: 0.5rem 1rem; }
-  .hero-copy { gap: 0.6rem; }
-}
-@media (min-width: 900px) and (max-height: 620px) {
-  .hero-visual { max-width: min(340px, 30vw); }
-  .hero-breadcrumb { display: none; }
-  .hero-title { font-size: clamp(1.375rem, 2.8vw, 2.25rem); }
-  .hero-cta { padding: 0.65rem 1.15rem; min-height: 42px; }
-}
-
-/* Below 900px: auto-height so it can scroll naturally */
+/* Tablet / mobile — switch to auto height, stack */
 @media (max-width: 899px) {
   .hero {
     height: auto;
-    min-height: 100svh;
+    min-height: auto;
     max-height: none;
-    padding-top: calc(var(--header-h) + 20px);
-    padding-bottom: 40px;
-  }
-  @supports not (height: 100svh) {
-    .hero { min-height: 100vh; }
+    padding: calc(var(--header-h) + 24px) 0 40px;
   }
   .hero-inner {
     height: auto;
-    max-height: none;
-    gap: 28px;
-    padding-top: 0;
-    padding-bottom: 0;
+    gap: 32px;
   }
   .hero-copy { max-width: 100%; text-align: center; align-items: center; }
   .hero-breadcrumb { align-self: center; }
@@ -905,10 +876,9 @@ input, textarea { font-family: inherit; }
   }
 }
 @media (max-width: 560px) {
-  .hero { padding-top: calc(var(--header-h) + 16px); padding-bottom: 32px; }
-  .hero-inner { gap: 24px; }
+  .hero { padding: calc(var(--header-h) + 16px) 0 32px; }
   .hero-title { font-size: clamp(1.625rem, 8vw, 2.25rem); }
-  .hero-visual { max-width: min(320px, 82vw); }
+  .hero-visual { max-width: min(340px, 85vw); }
   .hero-visual-card--1 { top: 2%; right: -3%; padding: 8px 12px; }
   .hero-visual-card--2 { bottom: 4%; left: -5%; padding: 10px 14px; }
   .hero-visual-card .vc-icon { width: 26px; height: 26px; }
@@ -917,41 +887,48 @@ input, textarea { font-family: inherit; }
   .hero-visual-card .vc-text strong { font-size: 0.875rem; }
   .hero-visual-card--2 .vc-text strong { font-size: 1rem; }
   .hero-stat-div { display: none; }
-  .hero-stats { gap: 0.6rem 1rem; }
+  .hero-stats { gap: 0.75rem 1.25rem; }
 }
 @media (max-width: 380px) {
   .hero-title { font-size: 1.5rem; }
-  .hero-visual { max-width: min(260px, 78vw); }
+  .hero-visual { max-width: min(280px, 82vw); }
   .hero-stats { font-size: 0.875rem; }
 }
-/* Landscape phones — very compact, no floating cards */
+/* Landscape phones — compact */
 @media (max-width: 899px) and (orientation: landscape) and (max-height: 620px) {
-  .hero {
-    min-height: 100vh;
-    padding-top: calc(var(--header-h) + 12px);
-    padding-bottom: 20px;
-  }
-  .hero-inner { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .hero { padding: calc(var(--header-h) + 12px) 0 24px; }
+  .hero-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
   .hero-copy { text-align: left; align-items: flex-start; }
-  .hero-breadcrumb { align-self: flex-start; display: none; }
-  .hero-desc { text-align: left; margin: 0; font-size: 0.8125rem; }
+  .hero-breadcrumb { align-self: flex-start; }
+  .hero-desc { text-align: left; margin: 0; }
   .hero-stats { justify-content: flex-start; }
-  .hero-cta { align-self: flex-start; padding: 0.6rem 1rem; min-height: 40px; }
-  .hero-visual { order: 2; max-width: min(220px, 38vw); }
-  .hero-title { font-size: clamp(1.125rem, 3.6vw, 1.625rem); }
+  .hero-cta { align-self: flex-start; }
+  .hero-visual { order: 2; max-width: min(240px, 40vw); }
+  .hero-title { font-size: clamp(1.25rem, 4vw, 1.75rem); }
   .hero-visual-card--1, .hero-visual-card--2 { display: none; }
+}
+/* Short desktop screens (e.g. 720p laptop) — shrink visual so nothing clips */
+@media (min-width: 900px) and (max-height: 800px) {
+  .hero-visual { max-width: min(420px, 38vw); max-height: calc(100svh - var(--header-h) - 60px); }
+  .hero-title { font-size: clamp(1.75rem, 3.8vw, 3.25rem); }
+  .hero-inner { gap: clamp(32px, 4vw, 56px); }
+}
+@media (min-width: 900px) and (max-height: 700px) {
+  .hero-visual { max-width: min(380px, 34vw); }
+  .hero-title { font-size: clamp(1.5rem, 3.4vw, 2.75rem); }
+  .hero-desc { font-size: 0.9375rem; }
+  .hero-stats { gap: 0.75rem 1.25rem; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MENU SECTION — with proper scroll offset
+   MENU SECTION
    ═══════════════════════════════════════════════════════════════ */
 .menu-section {
   background: var(--paper);
   color: var(--text-light);
-  padding: clamp(1.5rem, 3vw, 2.5rem) 0 clamp(6rem, 10vw, 8rem);
+  padding: clamp(2rem, 4vw, 3rem) 0 clamp(6rem, 10vw, 8rem);
   position: relative;
-  /* KEY FIX: this is the anchor target — offset it by header height + breathing room */
-  scroll-margin-top: calc(var(--header-h) + 16px);
+  scroll-margin-top: var(--header-h);
   min-height: 100vh;
 }
 .menu-inner {
@@ -1602,6 +1579,7 @@ input, textarea { font-family: inherit; }
   border-top: none;
 }
 
+/* Animated gradient top border */
 .site-footer::before {
   content: '';
   position: absolute;
@@ -1630,6 +1608,7 @@ input, textarea { font-family: inherit; }
   padding: clamp(1.5rem, 3vw, 2.25rem) var(--gutter);
 }
 
+/* Single row on desktop, stacked on mobile */
 .footer-main {
   display: grid;
   grid-template-columns: 1fr;
@@ -1646,6 +1625,7 @@ input, textarea { font-family: inherit; }
   }
 }
 
+/* Left: brand */
 .footer-brand {
   display: flex;
   align-items: center;
@@ -1683,6 +1663,7 @@ input, textarea { font-family: inherit; }
   color: var(--text-dark-muted);
 }
 
+/* Middle: nav links */
 .footer-nav {
   display: flex;
   flex-wrap: wrap;
@@ -1715,6 +1696,7 @@ input, textarea { font-family: inherit; }
 .footer-nav a:hover { color: var(--paper); }
 .footer-nav a:hover::after { transform: scaleX(1); }
 
+/* Right: contact + socials */
 .footer-contact {
   display: flex;
   flex-direction: column;
@@ -1772,6 +1754,7 @@ input, textarea { font-family: inherit; }
 }
 .footer-socials a:hover svg { stroke: var(--ink); }
 
+/* Bottom strip */
 .footer-bottom-strip {
   display: flex;
   flex-direction: column;
@@ -1832,54 +1815,12 @@ input, textarea { font-family: inherit; }
   display: inline-block;
 }
 
-/* Footer responsive — everything centered on small devices */
-@media (max-width: 899px) {
-  .footer-main {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    justify-items: center;
-    text-align: center;
-  }
-  .footer-brand {
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-  .footer-brand-text { align-items: center; }
-  .footer-nav {
-    justify-content: center;
-    max-width: 340px;
-    margin: 0 auto;
-  }
-  .footer-contact {
-    align-items: center;
-    gap: 0.6rem;
-    width: 100%;
-  }
-  .footer-socials {
-    justify-content: center;
-  }
-  .footer-bottom-strip {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.6rem;
-  }
-  .footer-credit {
-    justify-content: center;
-  }
-}
-
+/* Footer responsive */
 @media (max-width: 640px) {
   .footer-wrap { padding: 1.5rem var(--gutter); }
-  .footer-main { gap: 1.25rem; padding-bottom: 1.25rem; }
+  .footer-main { gap: 1rem; padding-bottom: 1rem; }
   .footer-nav { gap: 0.4rem 1rem; }
   .footer-nav a { font-size: 0.75rem; }
-  .footer-brand-name { font-size: 1.125rem; }
-  .footer-brand-tagline { font-size: 0.5625rem; }
-  .footer-contact-row { font-size: 0.6875rem; }
-  .footer-socials a { width: 30px; height: 30px; }
-  .footer-socials a svg { width: 13px; height: 13px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2900,7 +2841,7 @@ input, textarea { font-family: inherit; }
       <span class="hero-spark hero-spark--3" aria-hidden="true"></span>
 
       <div class="hero-visual-main">
-        <img src="https://static.vecteezy.com/system/resources/previews/070/182/889/large_2x/freshly-baked-pizza-slice-being-lifted-with-stretchy-cheese-free-png.png" alt="Fresh food from THE भु-से-छो: kitchen" loading="eager" fetchpriority="high" width="1200" height="1200">
+        <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1200&q=80" alt="Fresh food from THE भु-से-छो: kitchen" loading="eager" fetchpriority="high" width="1200" height="1200">
       </div>
 
       <div class="hero-visual-card hero-visual-card--1">
@@ -2971,6 +2912,7 @@ input, textarea { font-family: inherit; }
 
     <div class="footer-main">
 
+      <!-- Brand with logo image -->
       <div class="footer-brand">
         <img src="logo.png" alt="THE भु-से-छो: logo" width="48" height="48" onerror="this.style.display='none'">
         <div class="footer-brand-text">
@@ -2981,6 +2923,7 @@ input, textarea { font-family: inherit; }
         </div>
       </div>
 
+      <!-- Nav links -->
       <nav class="footer-nav" aria-label="Footer navigation">
         <a href="/#experience">Experience</a>
         <a href="/#menu">Menu</a>
@@ -2990,6 +2933,7 @@ input, textarea { font-family: inherit; }
         <a href="/#findus">Find Us</a>
       </nav>
 
+      <!-- Contact + socials -->
       <div class="footer-contact">
         <div class="footer-contact-row">
           <span>School Dada · Urlabari-4</span>
@@ -3012,6 +2956,7 @@ input, textarea { font-family: inherit; }
 
     </div>
 
+    <!-- Bottom strip -->
     <div class="footer-bottom-strip">
       <p class="footer-copy">
         © <span id="footerYear">2025</span> <strong>THE भु-से-छो:</strong> · All rights reserved.
@@ -3189,6 +3134,7 @@ const CONFIG = {
   qrImage: '',
 };
 
+/* ═══ CURRENT YEAR ═══ */
 const footerYearEl = document.getElementById('footerYear');
 if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 
